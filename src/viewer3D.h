@@ -18,8 +18,8 @@ typedef struct s_rgb {
 } t_rgb;
 
 typedef struct s_viewer {
-  double line_height;
-  t_rgb color;
+  double **p; // точки
+  double **f; // вершины
 } t_viewer;
 
 int run_app(int argc, char **argv);
