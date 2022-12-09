@@ -18,8 +18,6 @@
 // gcc -g -std=c11 -o App main.c
 // gcc $( pkg-config --cflags gtk4 ) -o My2App main.c $( pkg-config --libs gtk4 )
 
-// valgrind --tool=memcheck ./App
-// valgrind --track-origins=yes ./App
 // valgrind --leak-check=full ./App
 
 #define _GNU_SOURCE
