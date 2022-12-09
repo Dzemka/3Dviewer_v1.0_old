@@ -14,7 +14,7 @@ TEX2DVI = $(shell tex2dvi)
 	GTK_LDFLAGS = $(shell pkg-config --libs gtk4)
 
 	CFLAGS = $(GTK_CFLAGS)  #-Wall -Wextra -Werror
-	LDFLAGS = $(GTK_LDFLAGS) -lreadline
+	LDFLAGS = $(GTK_LDFLAGS) -lreadline -L/usr/lib/x86_64-linux-gnu -lm
 
 #COMMANDS
 	CC = gcc
