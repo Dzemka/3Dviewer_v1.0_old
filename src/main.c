@@ -2,12 +2,13 @@
 
 int main(int argc, char** argv) {
   int status;
-  char  *str;
-
+  t_viewer viewer;
   // parser
 
+
   // graphics
-  status = run_app(argc, argv);
+  parser("Camera.obj", &viewer);
+  status = run_app(argc, argv, &viewer);
   //graphics
-  return (status);
+  return (0);
 }

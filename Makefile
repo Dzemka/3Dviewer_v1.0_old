@@ -2,6 +2,10 @@ NAME = viewer
 
 SRC = main.c \
 		run_app.c \
+		gui_activate.c \
+		draw_model.c \
+		buttons_manager.c \
+		parser.c \
 
 OBJ = $(SRC:%.c=$(OBJ_DIR)%.o)
 
@@ -10,10 +14,13 @@ OBJ_DIR = ./obj/
 TEX2DVI = $(shell tex2dvi)
 
 #FLAGS
+#	GTK_CFLAGS = $(shell pkg-config --cflags gtk4)
+#	GTK_LDFLAGS = $(shell pkg-config --libs gtk4)
+
 	GTK_CFLAGS = $(shell pkg-config --cflags gtk4)
 	GTK_LDFLAGS = $(shell pkg-config --libs gtk4)
 
-	CFLAGS = $(GTK_CFLAGS)  #-Wall -Wextra -Werror
+	CFLAGS = $(GTK_CFLAGS) #-Wall -Wextra -Werror
 	LDFLAGS = $(GTK_LDFLAGS) -lreadline -L/usr/lib/x86_64-linux-gnu -lm
 
 #COMMANDS
@@ -33,7 +40,7 @@ $(NAME):	$(OBJ)
 
 $(OBJ_DIR)%.o:%.c $(HEADERS)
 				mkdir -p $(OBJ_DIR)
-				$(CC) $(CFLAGS) -c $< -o $@
+				$(CC) -lasan  $(CFLAGS) -c $< -o $@
 
 clean	:
 			$(RM) $(OBJ_DIR)
