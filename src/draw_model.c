@@ -161,14 +161,14 @@ static void draw_function(GtkDrawingArea *area, cairo_t *cr, int width,
 //    else
 //      cairo_set_source_rgb(cr, 0, 0, 255);
 
-    p1 = ((int *)list->content)[0] + 1;
-    p2 = ((int *)list->content)[1] + 1;
-    p3 = ((int *)list->content)[2] + 1;
-    p4 = ((int *)list->content)[3] + 1;
+    p1 = ((int *)list->content)[0];
+    p2 = ((int *)list->content)[1];
+    p3 = ((int *)list->content)[2];
+    p4 = ((int *)list->content)[3];
     cairo_move_to(cr, cx + p[p1][0], cy + p[p1][1]);
     cairo_line_to(cr, cx + p[p2][0], cy + p[p2][1]);
     cairo_line_to(cr, cx + p[p3][0], cy + p[p3][1]);
-//    if (p4)
+    if (p4)
       cairo_line_to(cr, cx + p[p4][0], cy + p[p4][1]);
     cairo_line_to(cr, cx + p[p1][0], cy + p[p1][1]);
 

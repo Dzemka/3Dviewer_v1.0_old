@@ -116,6 +116,8 @@ void parser(char *s, t_viewer *viewer) {
         }
         ft_lstadd_back(&points, tmp_point);
       } else if (strcmp(tmp[0], "f") == 0) {
+        if (i == 5)
+          printf("oplala\n");
         if (i < 4) {
           printf("Недостаточно точек грани !\n");
           i = 0;
@@ -127,7 +129,8 @@ void parser(char *s, t_viewer *viewer) {
           return;
         }
         int *plane = (int *)(malloc(sizeof(int) * (i - 1)));
-        plane[i - 2] = 0;
+        plane[i - 1] = 0;
+
         unsigned j = 1;
         i = 0;
         while (tmp[j] != NULL) {
