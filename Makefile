@@ -6,6 +6,10 @@ SRC = main.c \
 		draw_model.c \
 		buttons_manager.c \
 		parser.c \
+		parse_value.c \
+		ft_split.c \
+		list_utils.c \
+		utils.c \
 
 OBJ = $(SRC:%.c=$(OBJ_DIR)%.o)
 
@@ -27,7 +31,7 @@ TEX2DVI = $(shell tex2dvi)
 	CC = gcc
 	RM = rm -rf
 
-VPATH = ./src/
+VPATH = ./src/ ./src/parser
 
 .PHONY	: all install uninstall clean  re dvi
 

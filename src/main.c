@@ -2,13 +2,17 @@
 
 int main(int argc, char** argv) {
   int status;
-  t_viewer viewer;
+  t_viewer *viewer;
+  viewer = malloc(sizeof(t_viewer));
   // parser
 
 
   // graphics
-  parser("Camera.obj", &viewer);
-  status = run_app(argc, argv, &viewer);
+  parser("cub.obj", viewer);
+  viewer->info.camera.x = 0;
+  viewer->info.camera.y = 0;
+  viewer->info.camera.z = viewer->dimensions.z_max + 200;
+  status = run_app(argc, argv, viewer);
   //graphics
   return (0);
 }

@@ -47,7 +47,7 @@ static void app_activate(GApplication *app, t_viewer *viewer) {
 
   win = gtk_application_window_new(GTK_APPLICATION(app));
   gtk_window_set_title(GTK_WINDOW(win), "3Dviewer_v1.0");
-  gtk_window_set_default_size(GTK_WINDOW(win), 1920, 1080);
+//  gtk_window_set_default_size(GTK_WINDOW(win), 1920, 1080);
       gui_activate(viewer, win);
   printf("%d\n", gtk_widget_get_width(GTK_WIDGET(win)));
 
@@ -80,5 +80,7 @@ int run_app(int argc, char **argv, t_viewer *viewer) {
 ////   // g_signal_connect(app, "open", G_CALLBACK(app_open), NULL);
    status = g_application_run(G_APPLICATION(app), argc, argv);
   g_object_unref(app);
+  printf("return\n");
+  exit(0);
   return (status);
 }
