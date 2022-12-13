@@ -24,15 +24,25 @@ void rotate(t_viewer *viewer, int axes, double rad)
   gtk_widget_queue_draw(viewer->model);
 }
 
-void scale(GtkButton *btn, t_viewer *viewer)
+void zoom(t_viewer *viewer, double scale)
 {
   int i;
 
   i = -1;
-  if (viewer->info.vertexes3d[2] < 100 && viewer->info.vertexes3d[2] > -100)
-  {
     while (++i < viewer->info.count_v * 3)
-      viewer->info.vertexes3d[i] *= viewer->info.scale;
+      viewer->info.vertexes3d[i] *= scale;
+  gtk_widget_queue_draw(viewer->model);
+}
+
+void move(t_viewer *viewer, int axes, double move_step)
+{
+  int i;
+
+  i = 0;
+  while (i < viewer->info.count_v * 3)
+  {
+    viewer->info.vertexes3d[i + axes] += move_step;
+    i += 3;
   }
   gtk_widget_queue_draw(viewer->model);
 }

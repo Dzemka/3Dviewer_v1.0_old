@@ -8,6 +8,7 @@ SRC = main.c \
 		button_x.c \
 		button_y.c \
 		button_z.c \
+		button_zoom.c \
 		matrix_transformation.c \
 		parser.c \
 		parse_value.c \

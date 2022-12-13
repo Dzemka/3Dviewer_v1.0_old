@@ -49,6 +49,7 @@ typedef struct s_info {
   double rad_y;
   double rad_z;
   double scale;
+  double move_step;
 } t_info;
 
 typedef struct s_viewer {
@@ -80,7 +81,9 @@ void draw_model(t_viewer *viewer);
 void buttons_manager(t_viewer *viewer, GtkWidget *box);
 void button_x(t_viewer *viewer, GtkWidget *grid);
 void rotate(t_viewer *viewer, int axes, double rad);
-void scale(GtkButton *btn, t_viewer *viewer);
+void zoom(t_viewer *viewer, double scale);
+void move(t_viewer *viewer, int axes, double move_step);
+void button_zoom(t_viewer *viewer, GtkWidget *grid);
 void button_y(t_viewer *viewer, GtkWidget *grid);
 void button_z(t_viewer *viewer, GtkWidget *grid);
 #endif

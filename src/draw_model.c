@@ -31,9 +31,17 @@ static void draw(t_viewer *viewer, cairo_t *cr) {
   size_t index_vertex;
 
   list = viewer->info.faces;
+
   while (list) {
     plane = (t_plane *)list->content;
     i = -1;
+    double dashes[] = {50.0,
+        25.0
+    };
+    int    ndash  = sizeof (dashes)/sizeof(dashes[0]);
+    double offset = -50.0;
+
+    cairo_set_dash (cr, dashes, ndash, offset);
     while (++i < (int)plane->size) {
       index_vertex = (plane->indexes[i % plane->size] -
                       1);  // 0 % 4 == 0 || 1 % 4 == 1 || 4 % 4 ==  0
@@ -57,11 +65,15 @@ static void draw_function(GtkDrawingArea *area, cairo_t *cr, int width,
   viewer = pointer;
 
   central_proj(viewer, width, height);
+  cairo_set_source_rgb(cr, 255, 255, 255);
+  cairo_rectangle(cr, 0, 0, width, height);
+  cairo_fill(cr);
+  cairo_set_source_rgb(cr, 0, 0, 255);
   draw(viewer, cr);
 }
 
 void draw_model(t_viewer *viewer) {
-  gtk_widget_set_size_request(viewer->model, 1920 - 500, 1000);
+  gtk_widget_set_size_request(viewer->model, 1920 - 500, 1080);
   gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(viewer->model), draw_function,
                                  viewer, NULL);
 }
