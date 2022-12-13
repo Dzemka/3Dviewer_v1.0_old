@@ -1,25 +1,5 @@
 #include "../viewer3D.h"
 
-static void init_vertex(t_viewer *viewer)
-{
-  int i;
-  int j;
-  t_list *temp;
-
-  viewer->info.vert = malloc(sizeof (double) * viewer->info.count_v * 3);
-  temp = viewer->vertex_list;
-  j = 0;
-  while (temp)
-  {
-    i = -1;
-    while (++i < 3) {
-      viewer->info.vert[j] = ((double *)temp->content)[i];
-      j++;
-    }
-    temp = temp->next;
-  }
-}
-
 static FILE *get_file(const char *s) {
   FILE *file;
 
@@ -67,8 +47,11 @@ int parser(const char *s, t_viewer *viewer) {
   read_end = 0;
   viewer->vertex_list = NULL;
   viewer->info.faces = NULL;
+  viewer->info.vertexes2d = NULL;
+  viewer->info.vertexes3d = NULL;
   viewer->info.count_v = 0;
   while (!read_end) read_end = parse_file(&file, viewer);
   fclose(file);
-  init_vertex(viewer);
+  set_values(viewer);
+
 }
