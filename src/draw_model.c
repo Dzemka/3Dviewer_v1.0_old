@@ -1,6 +1,28 @@
 #include "viewer3D.h"
 
-static void central_proj(t_viewer *viewer, int width, int height) {
+void parallel_proj(t_viewer *viewer, int width, int height) {
+    int i;
+    int j;
+
+    i = 0;
+    j = 0;
+    while (j < viewer->info.count_v * 2) {
+        viewer->info.vertexes2d[j] =
+//                (5000 / (viewer->info.camera.z - viewer->info.vertexes3d[i + 2]) *
+                 (viewer->info.vertexes3d[i] - viewer->info.camera.x) +
+                 viewer->info.camera.x +
+                 width / 2;  // xz = (5000/(cz - z) * (x - cx) + cx + width / 2)
+        viewer->info.vertexes2d[j + 1] =
+                (height / 2 -
+//                 (5000 / (viewer->info.camera.z - viewer->info.vertexes3d[i + 2]) *
+                  (viewer->info.vertexes3d[i + 1] - viewer->info.camera.y) +
+                  viewer->info.camera.y);
+        j += 2;
+        i += 3;
+    }
+}
+
+void central_proj(t_viewer *viewer, int width, int height) {
   int i;
   int j;
 
@@ -64,7 +86,10 @@ static void draw_function(GtkDrawingArea *area, cairo_t *cr, int width,
   t_viewer *viewer;
   viewer = pointer;
 
-  central_proj(viewer, width, height);
+//  central_proj(viewer, width, height);
+//  paralell_proj(viewer, width, height);
+    viewer->func_proj(viewer, width, height);
+
   cairo_set_source_rgb(cr, 255, 255, 255);
   cairo_rectangle(cr, 0, 0, width, height);
   cairo_fill(cr);

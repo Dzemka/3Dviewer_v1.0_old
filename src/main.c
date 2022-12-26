@@ -13,6 +13,7 @@ int main(int argc, char **argv) {
   viewer->info.camera.x = 0;
   viewer->info.camera.y = 0;
   viewer->info.camera.z = viewer->dimensions.z_max + 200;
+    viewer->func_proj = &central_proj;
 
   status = run_app(argc, argv, viewer);
   //graphics

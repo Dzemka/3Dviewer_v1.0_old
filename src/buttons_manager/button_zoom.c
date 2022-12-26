@@ -1,24 +1,25 @@
 #include "../viewer3D.h"
 
-static void zoom_in(GtkButton *btn, t_viewer *viewer)
+static void zooming(GtkButton *btn, t_viewer *viewer)
 {
-  zoom(viewer, viewer->info.scale);
+    double z;
+
+    z = atof(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->buttons_input.entry_zoom))));
+    if (z == 0)
+        z = 1;
+    zoom(viewer, z);
 }
 
-static void zoom_out(GtkButton *btn, t_viewer *viewer)
+void button_zoom(t_viewer *viewer, GtkWidget *box_buttons)
 {
-  zoom(viewer, 1 / viewer->info.scale);
-}
+    GtkWidget *box_zoom;
+    GtkWidget *button_zoom;
 
-void button_zoom(t_viewer *viewer, GtkWidget *grid)
-{
-  GtkWidget *button_zoom_in;
-  GtkWidget *button_zoom_out;
-
-  button_zoom_in = gtk_button_new_with_label("zoom in");
-  g_signal_connect(button_zoom_in, "clicked", G_CALLBACK(zoom_in), viewer);
-  gtk_grid_attach(GTK_GRID(grid), button_zoom_in, 0, 6, 2, 1);
-  button_zoom_out = gtk_button_new_with_label("zoom out");
-  g_signal_connect(button_zoom_out, "clicked", G_CALLBACK(zoom_out), viewer);
-  gtk_grid_attach(GTK_GRID(grid), button_zoom_out, 3, 6, 2, 1);
+    box_zoom = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_append(GTK_BOX(box_buttons), box_zoom);
+    viewer->buttons_input.entry_zoom = gtk_entry_new();
+    button_zoom = gtk_button_new_with_label("Enter zoom");
+    gtk_box_append(GTK_BOX(box_zoom), viewer->buttons_input.entry_zoom);
+    gtk_box_append(GTK_BOX(box_zoom), button_zoom);
+    g_signal_connect(GTK_BUTTON(button_zoom), "clicked", G_CALLBACK(zooming), viewer);
 }

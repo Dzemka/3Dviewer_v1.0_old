@@ -2,49 +2,44 @@
 
 static void rotate_pos(GtkButton *btn, t_viewer *viewer)
 {
-  viewer->info.rad_x = fabs(viewer->info.rad_x);
-  rotate(viewer, 0, viewer->info.rad_x);
-}
 
-static void rotate_neg(GtkButton *btn, t_viewer *viewer)
-{
-  viewer->info.rad_x = -fabs(viewer->info.rad_x);
-  rotate(viewer, 0, viewer->info.rad_x);
+    double rotate_x;
+
+    rotate_x = 0;
+    rotate_x = atof(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->buttons_input.entry_rotate_x))));
+    viewer->info.rad_x = rotate_x;
+    rotate(viewer, 0, rotate_x);
 }
 
 static void move_pos(GtkButton *btn, t_viewer *viewer)
 {
-  printf("%f\n", viewer->info.move_step);
-  move(viewer, 0, -viewer->info.move_step);
+    int move_x;
+
+    move_x = 0;
+    move_x = atoi(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->buttons_input.entry_move_x))));
+//    viewer->info.move_step = move_x;
+    move(viewer, 0, move_x);
 }
 
-static void move_neg(GtkButton *btn, t_viewer *viewer)
+void  button_x(t_viewer *viewer, GtkWidget *box_buttons)
 {
+    GtkWidget *box_move_x;
+    GtkWidget *entry_button_move;
+    GtkWidget *box_rotate_x;
+    GtkWidget *entry_button_rotate;
 
-  move(viewer, 0, viewer->info.move_step);
-}
-
-void  button_x(t_viewer *viewer, GtkWidget *grid)
-{
-
-  GtkWidget *button_rotate_pos;
-  GtkWidget *button_rotate_neg;
-  GtkWidget *button_move_pos;
-  GtkWidget *button_move_neg;
-
-  button_rotate_pos = gtk_button_new_with_label("x >");
-  gtk_grid_attach(GTK_GRID(grid), button_rotate_pos, 0, 3, 2, 1);
-  g_signal_connect(GTK_BUTTON(button_rotate_pos), "clicked", G_CALLBACK(rotate_pos), viewer);
-
-  button_rotate_neg = gtk_button_new_with_label("x <");
-  gtk_grid_attach(GTK_GRID(grid), button_rotate_neg, 3, 3, 2, 1);
-  g_signal_connect(GTK_BUTTON(button_rotate_neg), "clicked", G_CALLBACK(rotate_neg), viewer);
-
-  button_move_pos = gtk_button_new_with_label("move x pos");
-  gtk_grid_attach(GTK_GRID(grid), button_move_pos, 0, 7, 6, 1);
-  g_signal_connect(GTK_BUTTON(button_move_pos), "clicked", G_CALLBACK(move_pos), viewer);
-
-  button_move_neg = gtk_button_new_with_label("move x neg");
-  gtk_grid_attach(GTK_GRID(grid), button_move_neg, 0, 8, 6, 1);
-  g_signal_connect(GTK_BUTTON(button_move_neg), "clicked", G_CALLBACK(move_neg), viewer);
+    box_move_x = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_append(GTK_BOX(box_buttons), box_move_x);
+    viewer->buttons_input.entry_move_x = gtk_entry_new();
+    entry_button_move = gtk_button_new_with_label("Enter move x");
+    gtk_box_append(GTK_BOX(box_move_x), viewer->buttons_input.entry_move_x);
+    gtk_box_append(GTK_BOX(box_move_x), entry_button_move);
+    g_signal_connect(GTK_BUTTON(entry_button_move), "clicked", G_CALLBACK(move_pos), viewer);
+    box_rotate_x = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_append(GTK_BOX(box_buttons), box_rotate_x);
+    viewer->buttons_input.entry_rotate_x = gtk_entry_new();
+    entry_button_rotate = gtk_button_new_with_label("Enter rotate x");
+    gtk_box_append(GTK_BOX(box_rotate_x), viewer->buttons_input.entry_rotate_x);
+    gtk_box_append(GTK_BOX(box_rotate_x), entry_button_rotate);
+    g_signal_connect(GTK_BUTTON(entry_button_rotate), "clicked", G_CALLBACK(rotate_pos), viewer);
 }
