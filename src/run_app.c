@@ -1,26 +1,37 @@
 
 #include "viewer3D.h"
 
-static void app_activate(GApplication *app, t_viewer *viewer) {
-  GtkWidget *win;
+static void
+resize_cb(GtkWidget *widget,
+          int width,
+          int height,
+          gpointer data) {
+    printf("%d %d\n",width, height);
+}
 
-  win = gtk_application_window_new(GTK_APPLICATION(app));
-  gtk_window_set_title(GTK_WINDOW(win), "3Dviewer_v1.0");
-  gtk_window_set_default_size(GTK_WINDOW(win), 100, 100);
-  gui_activate(viewer, win);
-  gtk_widget_show(win);
+static void app_activate(GApplication *app, t_viewer *viewer) {
+    GtkWidget *win;
+
+    win = gtk_application_window_new(GTK_APPLICATION(app));
+    gtk_window_set_title(GTK_WINDOW(win), "3Dviewer_v1.0");
+//    gtk_widget_set_size_request(win, 1000, 480);
+    gtk_window_set_default_size(GTK_WINDOW(win), 640 + 280 + 280, 480);
+//    gtk_window_set_resizable(GTK_WINDOW(win), TRUE);
+//    g_signal_connect(win, "notify::resize", G_CALLBACK (resize_cb), viewer);
+        gui_activate(viewer, win);
+    gtk_widget_show(win);
 }
 
 int run_app(int argc, char **argv, t_viewer *viewer) {
-  GtkApplication *app;
-  char *s;
+    GtkApplication *app;
+//    char *s;
 
-  int status;
-  app = gtk_application_new(NULL, G_APPLICATION_FLAGS_NONE);
-  g_signal_connect(app, "activate", G_CALLBACK(app_activate), viewer);
-  status = g_application_run(G_APPLICATION(app), argc, argv);
-  g_object_unref(app);
-  printf("return\n");
-  exit(0);
-  return (status);
+    int status;
+    app = gtk_application_new(NULL, G_APPLICATION_FLAGS_NONE);
+    g_signal_connect(app, "activate", G_CALLBACK(app_activate), viewer);
+    status = g_application_run(G_APPLICATION(app), argc, argv);
+    g_object_unref(app);
+    printf("return\n");
+    exit(0);
+    return (status);
 }
