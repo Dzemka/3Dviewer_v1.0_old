@@ -1,11 +1,11 @@
-#include "viewer3D.h"
+#include "./viewer3D.h"
 
 void    get_screenshot(t_viewer *viewer, cairo_surface_t *surface) {
     GdkPixbuf *pixbuf = NULL;
     char *str;
     char *tmp;
 
-    if (viewer->info.make_screenshot == 1) {
+    if (viewer->info.make_screenshot == SCREENSHOT_CREATE) {
         tmp = ft_strjoin(*viewer->info.screenshot_file_name, ".");
         str = ft_strjoin(tmp, *viewer->info.screenshot_format);
         free(tmp);
@@ -16,10 +16,13 @@ void    get_screenshot(t_viewer *viewer, cairo_surface_t *surface) {
         g_object_unref(pixbuf);
         free(str);
         free(tmp);
-        viewer->info.make_screenshot = 0;
+        viewer->info.make_screenshot = DO_NOTHING;
     }
     else
     {
+        printf("png start\n");
         cairo_surface_write_to_png(surface, *viewer->info.screenshot_file_name);
+        printf("png end\n");
+        viewer->png_pause = FALSE;
     }
 }

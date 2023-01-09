@@ -8,6 +8,8 @@ static void rotate_pos(GtkButton *btn, t_viewer *viewer)
     rotate_value = 0;
     rotate_value = atof(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_rotate_x)))) * M_PI / 180;
     rotate(viewer, 0, rotate_value);
+    gtk_widget_queue_draw(viewer->model);
+
 }
 
 void input_rotating_x(t_viewer *viewer, GtkWidget *box_rotating) {

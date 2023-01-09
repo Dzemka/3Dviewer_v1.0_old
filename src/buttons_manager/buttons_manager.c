@@ -2,18 +2,42 @@
 
 static void enter(GtkButton *btn, t_viewer *viewer) {
     const char *s;
+    int i;
 
-    s = gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_file)));
+    viewer->filename = strdup(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_file))));
     //подготовить особождение перед открытием нового файла
-    parser(s, viewer);
+//    viewer->filename = strdup("Camera.obj");
+    i = -1;
+    printf("1- %ld\n", viewer->info.count_v);
+    free(viewer->info.vertexes3d);
+    free(viewer->info.vertexes2d);
+    ft_lstclear(&viewer->vertex_list, free);
+    viewer->vertex_list = NULL;
+//    ft_lstclear(&viewer->info.faces, free);
+    t_list *tmp;
+
+    tmp = viewer->info.faces;
+    t_plane *plane;
+    while(viewer->info.faces)
+    {
+        plane = viewer->info.faces->content;
+        tmp = viewer->info.faces->next;
+        free(plane->indexes);
+        free(plane);
+        free(viewer->info.faces);
+        viewer->info.faces = tmp;
+    }
+    viewer->info.faces = NULL;
+    free(viewer->p);
+    viewer->p = NULL;
+    ft_lstclear(&viewer->f, free);
+    viewer->f = NULL;
+    parser(viewer->filename, viewer);
+    printf("2- %ld\n", viewer->info.count_v);
+    gtk_widget_queue_draw(viewer->model);
 }
 
 static void button_transformation(t_viewer *viewer, GtkWidget *box_buttons) {
-//    viewer->info.rad_x = 0.5;
-//    viewer->info.rad_y = 0.5;
-//    viewer->info.rad_z = 0.5;
-//    viewer->info.scale = 2.0;
-//    viewer->info.move_step = 1;
     fill_frame_moving(viewer, box_buttons);
     fill_frame_rotating(viewer, box_buttons);
     fill_frame_scaling(viewer, box_buttons);
@@ -50,4 +74,5 @@ void buttons_manager(t_viewer *viewer, GtkWidget *box_left, GtkWidget *box_right
     set_size_vertices(viewer, box_left);
     set_screenshot_frame(viewer, box_right);
     set_gif_frame(viewer, box_right);
+    set_resize_frame(viewer, box_right);
 }

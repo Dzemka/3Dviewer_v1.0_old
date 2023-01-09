@@ -25,6 +25,7 @@ SRC = main.c \
 		set_size_vertices.c \
 		set_screenshot_frame.c \
 		set_gif_frame.c \
+		set_resize_frame.c \
 		projection.c \
 		get_screenshot.c \
 		matrix_transformation.c \
@@ -66,7 +67,7 @@ all : install
 install	:	$(NAME)
 
 $(NAME):	$(OBJ)
-		$(CC) $(OBJ) -g $(LDFLAGS) -o $(NAME)
+		$(CC) $(OBJ) $(LDFLAGS) -o $(NAME)
 
 $(OBJ_DIR)%.o:%.c $(HEADER)
 				mkdir -p $(OBJ_DIR)

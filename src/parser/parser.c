@@ -5,7 +5,7 @@ static FILE *get_file(const char *s) {
 
   file = fopen(s, "r");
   if (!file) printf("cannot open file\n");
-  return (file);
+    return (file);
 }
 
 int parse_values(char **line, t_viewer *viewer)
@@ -19,8 +19,7 @@ int parse_values(char **line, t_viewer *viewer)
   else
     status = parse_face(split_line, viewer);
   free(*line);
-  free(split_line);
-  clean_massive_2d(&split_line);
+    clean_massive_2d(&split_line);
   return (status);
 }
 
@@ -45,13 +44,8 @@ int parser(const char *s, t_viewer *viewer) {
   file = get_file(s);
   if (!file) return (1);
   read_end = 0;
-  viewer->vertex_list = NULL;
-  viewer->info.faces = NULL;
-  viewer->info.vertexes2d = NULL;
-  viewer->info.vertexes3d = NULL;
-  viewer->info.count_v = 0;
+
   while (!read_end) read_end = parse_file(&file, viewer);
   fclose(file);
   set_values(viewer);
-
 }

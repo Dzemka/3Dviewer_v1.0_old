@@ -11,6 +11,10 @@
 #include <gd.h>
 #include <string.h>
 
+#define DO_NOTHING 0
+#define SCREENSHOT_CREATE 1
+#define GIF_CREATE 2
+
 typedef struct s_list {
     void *content;
     struct s_list *next;
@@ -21,12 +25,12 @@ typedef struct s_plane {
     size_t size;
 } t_plane;
 
-typedef struct s_rgb {
-    int red;
-    int green;
-    int blue;
-
-} t_rgb;
+//typedef struct s_rgb {
+//    int red;
+//    int green;
+//    int blue;
+//
+//} t_rgb;
 
 typedef struct s_dimensions {
     double x_min;
@@ -61,8 +65,8 @@ typedef struct s_info {
     int type_vertices;
     GdkRGBA vertices_color;
     double vertices_size;
-    char    **screenshot_format;
-    char    **screenshot_file_name;
+    char **screenshot_format;
+    char **screenshot_file_name;
     int make_screenshot;
 } t_info;
 
@@ -76,10 +80,13 @@ typedef struct s_entry {
     GtkWidget *entry_rotate_z;
     GtkWidget *entry_zoom;
     GtkWidget *entry_screenshot;
-
+    GtkWidget *entry_gif;
+    GtkWidget *entry_width;
+    GtkWidget *entry_height;
 } t_entry;
 
 typedef struct s_viewer {
+    char *filename;
     t_info info;
     t_list *vertex_list;
     t_dimensions dimensions;
@@ -87,8 +94,8 @@ typedef struct s_viewer {
     t_list *f;  // плоскости
     GtkWidget *model;
     t_entry entry;
-    pthread_mutex_t mutex;
 //    int pause;
+    int png_pause;
 
     void (*func_proj)(struct s_viewer *viewer, int width, int height);
 } t_viewer;
@@ -109,7 +116,7 @@ int parse_face(char **split_line, t_viewer *viewer);
 
 void set_values(t_viewer *viewer);
 
-char	*ft_strjoin(char const *s1, char const *s2);
+char *ft_strjoin(char const *s1, char const *s2);
 
 void clean_massive_2d(char ***m);
 
@@ -186,6 +193,8 @@ void get_screenshot(t_viewer *viewer, cairo_surface_t *surface);
 void set_screenshot_frame(t_viewer *viewer, GtkWidget *box);
 
 void set_gif_frame(t_viewer *viewer, GtkWidget *box);
+
+void set_resize_frame(t_viewer *viewer, GtkWidget *box);
 
 void matrix_multiply(double **m1, double **m2);
 

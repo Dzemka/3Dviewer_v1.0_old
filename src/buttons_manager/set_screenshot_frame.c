@@ -5,7 +5,6 @@ static void make_screenshot(GtkWidget *btn, t_viewer *viewer) {
     char *str;
 
     buf = gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_screenshot));
-    printf("%d\n", gtk_entry_buffer_get_length(buf));
     if (gtk_entry_buffer_get_length(buf) == 0) {
         if (*viewer->info.screenshot_file_name)
             free(*viewer->info.screenshot_file_name);
@@ -20,7 +19,7 @@ static void make_screenshot(GtkWidget *btn, t_viewer *viewer) {
             *viewer->info.screenshot_file_name = strdup(str);
         }
     }
-    viewer->info.make_screenshot = 1;
+    viewer->info.make_screenshot = SCREENSHOT_CREATE;
     gtk_widget_queue_draw(viewer->model);
 }
 
@@ -50,7 +49,7 @@ void set_screenshot_frame(t_viewer *viewer, GtkWidget *box) {
     box_screenshot = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_frame_set_child(GTK_FRAME(frame), box_screenshot);
     viewer->entry.entry_screenshot = gtk_entry_new();
-    gtk_entry_set_placeholder_text(GTK_ENTRY(viewer->entry.entry_screenshot), "enter a file name");
+    gtk_entry_set_placeholder_text(GTK_ENTRY(viewer->entry.entry_screenshot), "Enter file name for screenshot");
     gtk_box_append(GTK_BOX(box_screenshot), viewer->entry.entry_screenshot);
     box_select_format = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_append(GTK_BOX(box_screenshot), box_select_format);

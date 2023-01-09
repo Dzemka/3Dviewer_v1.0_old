@@ -22,7 +22,7 @@ void rotate(t_viewer *viewer, int axes, double rad)
         m[i + el2] = v2;
         i += 3;
     }
-    gtk_widget_queue_draw(viewer->model);
+//    gtk_widget_queue_draw(viewer->model);
 }
 
 void zoom(t_viewer *viewer, double scale)
@@ -32,7 +32,7 @@ void zoom(t_viewer *viewer, double scale)
     i = -1;
     while (++i < viewer->info.count_v * 3)
         viewer->info.vertexes3d[i] *= scale;
-    gtk_widget_queue_draw(viewer->model);
+//    gtk_widget_queue_draw(viewer->model);
 }
 
 void move(t_viewer *viewer, int axes, double move_step)
@@ -45,5 +45,5 @@ void move(t_viewer *viewer, int axes, double move_step)
         viewer->info.vertexes3d[i + axes] += move_step;
         i += 3;
     }
-    gtk_widget_queue_draw(viewer->model);
+//    gtk_widget_queue_draw(viewer->model);
 }

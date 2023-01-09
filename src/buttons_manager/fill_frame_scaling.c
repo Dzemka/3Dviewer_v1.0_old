@@ -8,6 +8,7 @@ static void zooming(GtkButton *btn, t_viewer *viewer)
     if (z == 0)
         z = 1;
     zoom(viewer, z);
+    gtk_widget_queue_draw(viewer->model);
 }
 
 void fill_frame_scaling(t_viewer *viewer, GtkWidget *box_buttons){

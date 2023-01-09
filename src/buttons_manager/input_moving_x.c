@@ -7,6 +7,8 @@ static void move_pos(GtkButton *btn, t_viewer *viewer)
     move_value = 0;
     move_value = atoi(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_move_x))));
     move(viewer, 0, move_value);
+    gtk_widget_queue_draw(viewer->model);
+
 }
 
 void input_moving_x(t_viewer *viewer, GtkWidget *box_moving)

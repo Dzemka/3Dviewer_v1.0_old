@@ -24,9 +24,9 @@ void clean_massive_2d(char ***m)
 
   s = *m;
   i = -1;
-//  while (s[++i])
-//    free(s[i]);
-//  free(s);
+  while (s[++i])
+    free(s[i]);
+  free(s);
 }
 
 void  exit_message(char *s)

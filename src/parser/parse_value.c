@@ -69,7 +69,6 @@ int parse_face(char **split_line, t_viewer *viewer) {
   int i;
   t_plane *plane;
   t_list *list;
-  t_list *tmp;
 
   i = -1;
   while (split_line[++i])
