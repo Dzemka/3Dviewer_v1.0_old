@@ -4,17 +4,34 @@ static void resize(GtkWidget *btn, t_viewer *viewer)
 {
     int width;
     int height;
+    GtkEntryBuffer *buf_width;
+    GtkEntryBuffer *buf_height;
 
-    width = atoi(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_width))));
-    height = atoi(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_height))));
+    buf_width = gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_width));
+    width = atoi(gtk_entry_buffer_get_text(buf_width));
+    buf_height = gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_height));
+    height = atoi(gtk_entry_buffer_get_text(buf_height));
     if (width < 640)
+    {
         width = 640;
-    if (width > 1360)
+        gtk_entry_buffer_set_text(buf_width, "640", 3);
+    }
+    if (width > 1360) {
         width = 1360;
+        gtk_entry_buffer_set_text(buf_width, "1360", 4);
+    }
     if (height < 480)
+    {
         height = 480;
+        gtk_entry_buffer_set_text(buf_height, "480", 3);
+    }
     if (height > 1080)
+    {
         height = 1080;
+        gtk_entry_buffer_set_text(buf_height, "1080", 4);
+    }
+
+
     gtk_widget_set_size_request(viewer->model, width, height);
     gtk_widget_queue_draw(viewer->model);
 }

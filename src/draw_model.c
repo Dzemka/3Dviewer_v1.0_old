@@ -10,12 +10,15 @@ static void draw(t_viewer *viewer, cairo_t *cr) {
 
     list = viewer->info.faces;
     draw_settings(viewer, cr);
+    int j;
+
+    j = 0;
     while (list) {
+        j++;
         plane = (t_plane *) list->content;
         i = -1;
-            printf("%p %f\n", plane, coord_x);
         while (++i < (int) plane->size) {
-            index_vertex = (plane->indexes[i % plane->size] -
+            index_vertex = (plane->indexes[i % (int)plane->size] -
                             1);
             coord_x = viewer->info.vertexes2d[index_vertex * 2];
             coord_y = viewer->info.vertexes2d[index_vertex * 2 + 1];
@@ -24,12 +27,11 @@ static void draw(t_viewer *viewer, cairo_t *cr) {
             coord_x = viewer->info.vertexes2d[index_vertex * 2];
             coord_y = viewer->info.vertexes2d[index_vertex * 2 + 1];
             cairo_line_to(cr, coord_x, coord_y);
+            cairo_stroke(cr);
         }
-        cairo_stroke(cr);
         list = list->next;
     }
-
-    cairo_stroke(cr);
+//    cairo_stroke(cr);
 }
 
 static void clear_surface(cairo_surface_t *surface)//////////новое
@@ -40,6 +42,7 @@ static void clear_surface(cairo_surface_t *surface)//////////новое
 
     cairo_set_source_rgb(cr, 0, 0, 0);
     cairo_paint(cr);
+
 
     cairo_destroy(cr);
 }
@@ -87,7 +90,7 @@ resize_cb(GtkWidget *widget,
 }
 
 void draw_model(t_viewer *viewer) {
-    gtk_widget_set_size_request(viewer->model, 1000, 1000);
+    gtk_widget_set_size_request(viewer->model, 1360, 1080);
     gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(viewer->model), draw_function,
                                    viewer, NULL);
 }

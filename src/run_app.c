@@ -14,6 +14,7 @@ static void app_activate(GApplication *app, t_viewer *viewer) {
 
     win = gtk_application_window_new(GTK_APPLICATION(app));
     gtk_window_set_title(GTK_WINDOW(win), "3Dviewer_v1.0");
+    gtk_window_set_resizable(GTK_WINDOW(win), FALSE);
     gtk_window_set_default_size(GTK_WINDOW(win), 640 + 280 + 280, 480);
     gui_activate(viewer, win);
     gtk_widget_show(win);

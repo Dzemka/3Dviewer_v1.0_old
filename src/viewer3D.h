@@ -10,6 +10,7 @@
 #include <pthread.h>
 #include <gd.h>
 #include <string.h>
+#include <ctype.h>
 
 #define DO_NOTHING 0
 #define SCREENSHOT_CREATE 1
@@ -21,7 +22,7 @@ typedef struct s_list {
 } t_list;
 
 typedef struct s_plane {
-    ssize_t *indexes;
+    size_t *indexes;
     size_t size;
 } t_plane;
 
@@ -45,6 +46,7 @@ typedef struct s_camera {
     double x;
     double y;
     double z;
+    double screen_z;
 } t_camera;
 
 typedef struct s_info {
@@ -96,8 +98,11 @@ typedef struct s_viewer {
     t_entry entry;
 //    int pause;
     int png_pause;
-
+    int reparse;
+    GtkWidget *label_filename;
     void (*func_proj)(struct s_viewer *viewer, int width, int height);
+    t_list *tmp;
+    t_list *tmp2;
 } t_viewer;
 
 typedef struct s_matrix {

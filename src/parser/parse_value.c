@@ -1,5 +1,28 @@
 #include "../viewer3D.h"
 
+double ft_atof(char *str)
+{
+    double value = 0, decimal = 1;
+    unsigned char sign = 0, dec = 0;
+
+    if (*str == '+') str++;
+    if (*str == '-') { sign = 1; str++; }
+
+    while (*str) {
+        if (isdigit(*str)) {
+            value = (value * 10) + (*str - '0');
+            if (dec) decimal *= 10;
+        }
+        else if (*str == '.')
+            dec = 1;
+        else
+            break;
+        str++;
+    }
+
+    return (!sign) ? (value / decimal) : -(value / decimal);
+}
+
 static void set_start_value(double value, int axes, t_viewer *viewer) {
   if (axes == 0) {
     viewer->dimensions.x_max = value;
@@ -39,16 +62,25 @@ static int fill_vertex(char **split_line, t_viewer *viewer) {
   t_list *list;
   int i;
 
+  char *str;
+
+  str = strdup("3.52134");
+
   vertex = malloc(sizeof(double) * 3);
   if (!vertex) exit_message("Malloc error");
   viewer->info.count_v++;
   i = -1;
   while (++i < 3) {
-    vertex[i] = atof(split_line[i]);
+    vertex[i] = ft_atof(split_line[i]);
     set_dimensions(vertex[i], viewer, i);
   }
   list = ft_lstnew(vertex);
-  ft_lstadd_back(&viewer->vertex_list, list);
+  if (!viewer->vertex_list)
+      ft_lstadd_back(&viewer->vertex_list, list);
+  else
+      ft_lstadd_back(&viewer->tmp, list);
+  viewer->tmp = list;
+  //
 }
 
 int parse_vertex(char **split_line, t_viewer *viewer) {
@@ -85,6 +117,10 @@ int parse_face(char **split_line, t_viewer *viewer) {
   i = -1;
   while (++i < plane->size) plane->indexes[i] = atoi(split_line[i]);
   list = ft_lstnew(plane);
-  ft_lstadd_back(&viewer->info.faces, list);
+  if (!viewer->info.faces)
+      ft_lstadd_back(&viewer->info.faces, list);
+  else
+      ft_lstadd_back(&viewer->tmp2, list);
+  viewer->tmp2 = list;
   return (0);
 }
