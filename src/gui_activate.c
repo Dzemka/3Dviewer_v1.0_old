@@ -20,7 +20,7 @@ void gui_activate(t_viewer *viewer, GtkWidget *win) {
     gtk_box_append(GTK_BOX(box_main), box_buttons_left);
 //    gtk_box_append(GTK_BOX(box_main), frame);
 
-    viewer->label_filename = gtk_label_new(viewer->filename);
+    viewer->label_filename = gtk_label_new(NULL);
 
     gtk_box_append(GTK_BOX(box_main), box_model);
     gtk_box_append(GTK_BOX(box_model), viewer->label_filename);

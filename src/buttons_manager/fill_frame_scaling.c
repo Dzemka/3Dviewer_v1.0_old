@@ -4,6 +4,8 @@ static void zooming(GtkButton *btn, t_viewer *viewer)
 {
     double z;
 
+    if (viewer->info.make_screenshot != 0)
+        return;
     z = atof(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_zoom))));
     if (z == 0)
         z = 1;

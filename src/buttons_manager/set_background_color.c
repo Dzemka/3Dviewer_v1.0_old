@@ -4,7 +4,9 @@ static void change_background_color(GtkWidget *btn, t_viewer *viewer)
 {
     GdkRGBA color;
 
-    gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(btn), &viewer->info.background_color);
+    if (viewer->info.make_screenshot != 0)
+        return;
+    gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(btn), &viewer->settings.background_color);
     gtk_widget_queue_draw(viewer->model);
 }
 

@@ -13,7 +13,6 @@ void rotate(t_viewer *viewer, int axes, double rad)
     el2 = (axes + 2) % 3;
     i = 0;
     m = viewer->info.vertexes3d;
-//    rad *= -1;
     while (i < viewer->info.count_v * 3)
     {
         v1 = m[i + el1] * cos(rad) + m[i + el2] * sin(rad);
@@ -22,7 +21,6 @@ void rotate(t_viewer *viewer, int axes, double rad)
         m[i + el2] = v2;
         i += 3;
     }
-//    gtk_widget_queue_draw(viewer->model);
 }
 
 void zoom(t_viewer *viewer, double scale)
@@ -32,18 +30,16 @@ void zoom(t_viewer *viewer, double scale)
     i = -1;
     while (++i < viewer->info.count_v * 3)
         viewer->info.vertexes3d[i] *= scale;
-//    gtk_widget_queue_draw(viewer->model);
 }
 
 void move(t_viewer *viewer, int axes, double move_step)
 {
     int i;
 
-    i = 0;
+    i = 0; // добавить функцию пересчёта dimensions и добавить во все трансформации
     while (i < viewer->info.count_v * 3)
     {
         viewer->info.vertexes3d[i + axes] += move_step;
         i += 3;
     }
-//    gtk_widget_queue_draw(viewer->model);
 }

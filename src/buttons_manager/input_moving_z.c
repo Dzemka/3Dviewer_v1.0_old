@@ -4,6 +4,8 @@ static void move_pos(GtkButton *btn, t_viewer *viewer)
 {
     int move_value;
 
+    if (viewer->info.make_screenshot != 0)
+        return;
     move_value = 0;
     move_value = atoi(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_move_z))));
     move(viewer, 2, move_value);

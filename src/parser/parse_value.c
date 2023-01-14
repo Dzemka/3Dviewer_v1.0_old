@@ -45,14 +45,14 @@ static void set_dimensions(double value, t_viewer *viewer, int axes) {
     else if (value < viewer->dimensions.x_min)
       viewer->dimensions.x_min = value;
   } else if (axes == 1) {
-    if (value > viewer->dimensions.x_max)
+    if (value > viewer->dimensions.y_max)
       viewer->dimensions.y_max = value;
-    else if (value < viewer->dimensions.x_min)
+    else if (value < viewer->dimensions.y_min)
       viewer->dimensions.y_min = value;
   } else if (axes == 2) {
-    if (value > viewer->dimensions.x_max)
+    if (value > viewer->dimensions.z_max)
       viewer->dimensions.z_max = value;
-    else if (value < viewer->dimensions.x_min)
+    else if (value < viewer->dimensions.z_min)
       viewer->dimensions.z_min = value;
   }
 }
@@ -61,10 +61,6 @@ static int fill_vertex(char **split_line, t_viewer *viewer) {
   double *vertex;
   t_list *list;
   int i;
-
-  char *str;
-
-  str = strdup("3.52134");
 
   vertex = malloc(sizeof(double) * 3);
   if (!vertex) exit_message("Malloc error");
@@ -80,7 +76,6 @@ static int fill_vertex(char **split_line, t_viewer *viewer) {
   else
       ft_lstadd_back(&viewer->tmp, list);
   viewer->tmp = list;
-  //
 }
 
 int parse_vertex(char **split_line, t_viewer *viewer) {

@@ -2,13 +2,22 @@
 
 static void move_pos(GtkButton *btn, t_viewer *viewer)
 {
-    int move_value;
+    double move_value;
 
+    //сделать ограничитель
+    if (viewer->info.make_screenshot != 0)
+        return;
     move_value = 0;
-    move_value = atoi(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_move_x))));
+    move_value = atof(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_move_x))));
+    printf("%f\n", move_value);
     move(viewer, 0, move_value);
-    gtk_widget_queue_draw(viewer->model);
-
+//    gtk_widget_queue_draw(viewer->model);
+    char res[] = "hel";
+    char *markup;
+    markup = g_markup_printf_escaped ("<span style=\"italic\" background=\"#000000\" foreground=\"#FFFFFF\" font-size=\"25pt\">\%s</span>", res);
+//    free(res);
+    gtk_label_set_markup(GTK_LABEL(viewer->label_filename), markup);
+    g_free (markup);
 }
 
 void input_moving_x(t_viewer *viewer, GtkWidget *box_moving)

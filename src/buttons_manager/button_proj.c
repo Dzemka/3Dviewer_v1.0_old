@@ -2,14 +2,18 @@
 
 static void select_central_proj(GtkButton *btn, t_viewer *viewer)
 {
-    viewer->func_proj = &central_proj;
+    if (viewer->info.make_screenshot != 0)
+        return;
+    viewer->settings.func_proj = &central_proj;
     gtk_widget_queue_draw(viewer->model);
 
 }
 
 static void select_parallel_proj(GtkButton *btn, t_viewer *viewer)
 {
-    viewer->func_proj = &parallel_proj;
+    if (viewer->info.make_screenshot != 0)
+        return;
+    viewer->settings.func_proj = &parallel_proj;
     gtk_widget_queue_draw(viewer->model);
 
 }

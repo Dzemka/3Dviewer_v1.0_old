@@ -4,19 +4,21 @@ static void make_screenshot(GtkWidget *btn, t_viewer *viewer) {
     GtkEntryBuffer *buf;
     char *str;
 
+    if (viewer->info.make_screenshot != 0)
+        return;
     buf = gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_screenshot));
     if (gtk_entry_buffer_get_length(buf) == 0) {
-        if (*viewer->info.screenshot_file_name)
-            free(*viewer->info.screenshot_file_name);
-        *viewer->info.screenshot_file_name = strdup("unnamed");
-        printf("%s\n", *viewer->info.screenshot_file_name);
+        if (viewer->info.screenshot_file_name)
+            free(viewer->info.screenshot_file_name);
+        viewer->info.screenshot_file_name = strdup("unnamed");
+        printf("%s\n", viewer->info.screenshot_file_name);
     }
     else {
         str = (char *) gtk_entry_buffer_get_text(buf);
         if (str) {
-            if (*viewer->info.screenshot_file_name)
-              free(*viewer->info.screenshot_file_name);
-            *viewer->info.screenshot_file_name = strdup(str);
+            if (viewer->info.screenshot_file_name)
+              free(viewer->info.screenshot_file_name);
+            viewer->info.screenshot_file_name = strdup(str);
         }
     }
     viewer->info.make_screenshot = SCREENSHOT_CREATE;
@@ -24,14 +26,14 @@ static void make_screenshot(GtkWidget *btn, t_viewer *viewer) {
 }
 
 static void set_jpeg(GtkWidget *btn, t_viewer *viewer) {
-    free(*viewer->info.screenshot_format);
-    *viewer->info.screenshot_format = strdup("jpeg");
+    free(viewer->info.screenshot_format);
+    viewer->info.screenshot_format = strdup("jpeg");
 
 }
 
 static void set_bmp(GtkWidget *btn, t_viewer *viewer) {
-    free(*viewer->info.screenshot_format);
-    *viewer->info.screenshot_format = strdup("bmp");
+    free(viewer->info.screenshot_format);
+    viewer->info.screenshot_format = strdup("bmp");
 
 }
 

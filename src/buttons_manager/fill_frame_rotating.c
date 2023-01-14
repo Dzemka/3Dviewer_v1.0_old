@@ -5,6 +5,8 @@ static void rotate_all(GtkButton *btn, t_viewer *viewer)
 
     double rotate_value;
 
+    if (viewer->info.make_screenshot != 0)
+        return;
     rotate_value = 0;
     rotate_value = atof(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_rotate_x))));
     rotate(viewer, 0, rotate_value);
@@ -14,6 +16,8 @@ static void rotate_all(GtkButton *btn, t_viewer *viewer)
     rotate_value = 0;
     rotate_value = atof(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_rotate_z))));
     rotate(viewer, 2, rotate_value);
+    gtk_widget_queue_draw(viewer->model);
+
 }
 
 void fill_frame_rotating(t_viewer *viewer, GtkWidget *box_buttons) {

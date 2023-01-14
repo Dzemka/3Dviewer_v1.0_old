@@ -1,17 +1,23 @@
 #include "../viewer3D.h"
 
 static void select_none_vertices(GtkWidget *btn, t_viewer *viewer) {
-    viewer->info.type_vertices = 0;
+    if (viewer->info.make_screenshot != 0)
+        return;
+    viewer->settings.vertices_type = NONE_VERTICES;
     gtk_widget_queue_draw(viewer->model);
 }
 
 static void select_circle_vertices(GtkWidget *btn, t_viewer *viewer) {
-    viewer->info.type_vertices = 1;
+    if (viewer->info.make_screenshot != 0)
+        return;
+    viewer->settings.vertices_type = CIRCLE_VERTICES;
     gtk_widget_queue_draw(viewer->model);
 }
 
 static void select_square_vertices(GtkWidget *btn, t_viewer *viewer) {
-    viewer->info.type_vertices = 2;
+    if (viewer->info.make_screenshot != 0)
+        return;
+    viewer->settings.vertices_type = SQUARE_VERTICES;
     gtk_widget_queue_draw(viewer->model);
 }
 

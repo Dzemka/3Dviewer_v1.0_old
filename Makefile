@@ -34,7 +34,9 @@ SRC = main.c \
 		set_values.c \
 		ft_split.c \
 		list_utils.c \
+		ft_itoa.c \
 		utils.c \
+		save_settings.c \
 
 OBJ = $(SRC:%.c=$(OBJ_DIR)%.o)
 

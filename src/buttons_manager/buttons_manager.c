@@ -4,13 +4,18 @@ static void enter(GtkButton *btn, t_viewer *viewer) {
     const char *s;
     int i;
 
+    if (viewer->info.make_screenshot != 0)
+        return;
+
     viewer->filename = strdup(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_file))));
     //подготовить особождение перед открытием нового файла
 //    viewer->filename = strdup("Camera.obj");
 //    i = -1;
 //    printf("1- %ld\n", viewer->info.count_v);
     free(viewer->info.vertexes3d);
+    viewer->info.vertexes3d = NULL;
     free(viewer->info.vertexes2d);
+    viewer->info.vertexes2d = NULL;
     ft_lstclear(&viewer->vertex_list, free);
     viewer->vertex_list = NULL;
 ////    ft_lstclear(&viewer->info.faces, free);
@@ -28,16 +33,26 @@ static void enter(GtkButton *btn, t_viewer *viewer) {
         viewer->info.faces = tmp;
     }
     viewer->info.faces = NULL;
-    free(viewer->p);
-    viewer->p = NULL;
-    ft_lstclear(&viewer->f, free);
-    viewer->f = NULL;
+//    free(viewer->p);
+//    viewer->p = NULL;
+//    ft_lstclear(&viewer->f, free);
+//    viewer->f = NULL;
     printf("2- %ld\n", viewer->info.count_v);
 //    viewer->reparse = 1;
     parser(viewer->filename, viewer);
 
+        char *temp;
+    char *str;
+    char *res;
+    temp = ft_itoa(viewer->info.count_v);
+    str = ft_strjoin(viewer->filename, " ");
+    res = ft_strjoin(str, temp);
+    free(str);
+    free(temp);
+//    temp = ft_strjoin(viewer->filename, str);
     char *markup;
-    markup = g_markup_printf_escaped ("<span style=\"italic\" background=\"#000000\" foreground=\"#FFFFFF\" font-size=\"25pt\">\%s</span>", viewer->filename);
+    markup = g_markup_printf_escaped ("<span style=\"italic\" background=\"#000000\" foreground=\"#FFFFFF\" font-size=\"25pt\">\%s</span>", res);
+    free(res);
     gtk_label_set_markup(GTK_LABEL(viewer->label_filename), markup);
     g_free (markup);
     gtk_widget_queue_draw(viewer->model);

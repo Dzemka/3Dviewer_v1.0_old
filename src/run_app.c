@@ -29,7 +29,5 @@ int run_app(int argc, char **argv, t_viewer *viewer) {
     g_signal_connect(app, "activate", G_CALLBACK(app_activate), viewer);
     status = g_application_run(G_APPLICATION(app), argc, argv);
     g_object_unref(app);
-    printf("return\n");
-    exit(0);
     return (status);
 }
