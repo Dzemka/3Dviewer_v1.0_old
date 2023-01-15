@@ -32,7 +32,7 @@ static void draw(t_viewer *viewer, cairo_t *cr) {
   }
 }
 
-static void clear_surface(cairo_surface_t *surface)  //////////новое
+static void clear_surface(cairo_surface_t *surface)
 {
   cairo_t *cr;
 

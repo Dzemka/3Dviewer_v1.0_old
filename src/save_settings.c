@@ -5,12 +5,13 @@ void save_settings(t_viewer *viewer) {
 
   file = fopen("settings", "w");
   fprintf(file, "PROJECTION ");
-  if (viewer->settings.func_proj == central_proj)
-    fprintf(file, "CENTRAL\n");
-  else
-    fprintf(file, "PARALLEL\n");
+//  if (viewer->settings.func_proj == central_proj)
+//    fprintf(file, "0\n");
+//  else
+//    fprintf(file, "1\n");
+  fprintf(file, "%d\n", viewer->settings.func_proj == parallel_proj);
   fprintf(file, "EDGE_TYPE ");
-  fprintf(file, "IS_DASHED %d\n", viewer->settings.is_dashed);
+  fprintf(file, "%d\n", viewer->settings.is_dashed);
 //  if (viewer->settings.is_dashed)
 //    fprintf(file, "DASHED\n");
 //  else

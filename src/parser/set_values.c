@@ -19,11 +19,13 @@ void set_values(t_viewer *viewer) {
         i = -1;
         while (++i < 3) {
             if (i == 0) {
-                ((double *) temp->content)[i] -= (viewer->dimensions.x_min + width / 2);
+              viewer->info.vertexes3d[j] = ((double *) temp->content)[i] - (viewer->dimensions.x_min + width / 2);
             } else if (i == 1) {
-                ((double *) temp->content)[i] -= (viewer->dimensions.y_min + height / 2);
+              viewer->info.vertexes3d[j] = ((double *) temp->content)[i] - (viewer->dimensions.y_min + height / 2);
             }
-            viewer->info.vertexes3d[j] = ((double *) temp->content)[i] * viewer->info.camera.screen_z;
+            else
+              viewer->info.vertexes3d[j] = ((double *) temp->content)[i];
+            viewer->info.vertexes3d[j] *= viewer->info.camera.screen_z;
             j++;
         }
         temp = temp->next;

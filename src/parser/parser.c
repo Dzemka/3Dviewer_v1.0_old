@@ -1,10 +1,25 @@
 #include "../viewer3D.h"
 
+static int relevant_file(const char *s) {
+  int i;
+
+  i = strlen(s) - 4;
+  return (s[i] == '.' && s[i + 1] == 'o' && s[i + 2] == 'b' &&
+          s[i + 3] == 'j');
+}
+
 static FILE *get_file(const char *s) {
   FILE *file;
 
+  if (!relevant_file(s)) {
+    printf("file is not in obj format\n");
+    return (NULL);
+  }
   file = fopen(s, "r");
-  if (!file) printf("cannot open file\n");
+  if (!file) {
+    printf("cannot open file\n");
+    return (NULL);
+  }
   return (file);
 }
 
@@ -22,12 +37,19 @@ int parse_values(char **line, t_viewer *viewer) {
   return (status);
 }
 
+// returns : error(-1), read_end(1), reads(0)
 static int parse_file(FILE *file, t_viewer *viewer) {
   char *line;
   size_t len;
 
   line = NULL;
-  if (getline(&line, &len, file) == -1) return (1);
+  errno = 0;
+  if (getline(&line, &len, file) == -1) {
+    if (errno) {
+      return (-1);
+    }
+    return (1);
+  }
   if (len > 2) {
     if ((line[0] == 'v' || line[0] == 'f') && line[1] == ' ')
       return (parse_values(&line, viewer));
@@ -41,15 +63,11 @@ int parser(const char *s, t_viewer *viewer) {
 
   file = get_file(s);
   if (!file) return (1);
-  viewer->vertex_list = NULL;
-  viewer->info.faces = NULL;
-  viewer->info.vertexes2d = NULL;
-  viewer->info.vertexes3d = NULL;
-  viewer->info.count_v = 0;
   read_end = 0;
   while (!read_end) read_end = parse_file(file, viewer);
   fclose(file);
-  // куда-нибудь заснутуть
+  if (read_end == -1) return (1);
+  // куда-нибудь засунуть
   viewer->info.vertexes3d = malloc(sizeof(double) * viewer->info.count_v * 3);
   viewer->info.vertexes2d = malloc(sizeof(double) * viewer->info.count_v * 2);
   // всё что между комментариями

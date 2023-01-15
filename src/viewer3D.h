@@ -65,7 +65,7 @@ typedef struct s_info {
   double move_step;
   char *screenshot_format;
   char *screenshot_file_name;
-  int make_screenshot; // поменять кнопку на дезактивацию для парсера
+  int make_screenshot;
 } t_info;
 
 typedef struct s_settings {
@@ -100,8 +100,6 @@ typedef struct s_viewer {
   t_info info;
   t_list *vertex_list;
   t_dimensions dimensions;
-//  double *p;  // точки
-//  t_list *f;  // плоскости
   GtkWidget *model;
   t_entry entry;
   int png_pause;
@@ -228,5 +226,9 @@ char *ft_itoa(int n);
 void *build_gif(t_viewer *viewer);
 
 void  save_settings(t_viewer *viewer);
+
+void get_settings(t_viewer *viewer);
+
+int parse_settings_file(t_viewer *viewer, FILE *file);
 
 #endif

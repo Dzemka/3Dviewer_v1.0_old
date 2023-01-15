@@ -37,6 +37,8 @@ SRC = main.c \
 		ft_itoa.c \
 		utils.c \
 		save_settings.c \
+		get_settings.c \
+		parse_settings_from_file.c \
 
 OBJ = $(SRC:%.c=$(OBJ_DIR)%.o)
 
