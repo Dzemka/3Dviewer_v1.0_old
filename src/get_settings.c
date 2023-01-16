@@ -35,6 +35,6 @@ static void get_settings_default(t_viewer *viewer)
 }
 
 void get_settings(t_viewer *viewer) {
-  if (!get_settings_from_file(viewer))
+  // if (!get_settings_from_file(viewer))
     get_settings_default(viewer);
 }

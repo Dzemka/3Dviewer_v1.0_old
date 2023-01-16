@@ -84,15 +84,15 @@ int parse_vertex(char **split_line, t_viewer *viewer) {
   i = -1;
   while (split_line[++i])
     ;
-  if (i != 3) {
-    printf("Incorrect number of points");
-    return (1);
+  if (i != 3 && i != 4) {
+    printf("Incorrect number of points\n");
+    return (-1);//исправлено
   }
   fill_vertex(split_line, viewer);
   return (0);
 }
 
-int parse_face(char **split_line, t_viewer *viewer) {
+int parse_face(int *max_point, char **split_line, t_viewer *viewer) {
   int i;
   t_plane *plane;
   t_list *list;
@@ -101,8 +101,8 @@ int parse_face(char **split_line, t_viewer *viewer) {
   while (split_line[++i])
     ;
   if (i < 3) {
-    printf("not enough plane points");
-    return (1);
+    printf("not enough plane points\n");
+    return (-1);//исправлено
   }
   plane = malloc(sizeof(t_plane));
   if (!plane) exit_message("Malloc error");
@@ -110,8 +110,14 @@ int parse_face(char **split_line, t_viewer *viewer) {
   if (!plane->indexes) exit_message("Malloc error");
   plane->size = i;
   i = -1;
-  while (++i < plane->size) plane->indexes[i] = atoi(split_line[i]);
+  while (++i < plane->size) 
+  {
+    plane->indexes[i] = atoi(split_line[i]);
+    if (plane->indexes[i] > *max_point)
+      *max_point = plane->indexes[i];
+  }
   list = ft_lstnew(plane);
+  //проверка list == NULL
   if (!viewer->info.faces)
       ft_lstadd_back(&viewer->info.faces, list);
   else

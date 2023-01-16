@@ -116,11 +116,15 @@ typedef struct s_matrix {
 
 int parser(const char *s, t_viewer *viewer);
 
-int parse_value(char **line, t_viewer *viewer);
+int parse_values(int *max_point, char **line, t_viewer *viewer);
 
 int parse_vertex(char **split_line, t_viewer *viewer);
 
-int parse_face(char **split_line, t_viewer *viewer);
+int parse_face(int *max_point, char **split_line, t_viewer *viewer);
+
+void  create_stringlabel(char *text, t_viewer *viewer);
+
+void  free_all(t_viewer *viewer);
 
 void set_values(t_viewer *viewer);
 

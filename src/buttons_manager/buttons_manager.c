@@ -1,35 +1,67 @@
 #include "../viewer3D.h"
 
+void  create_stringlabel(char *text, t_viewer *viewer)
+{
+  char *str;
+  int i, j;
+
+  str = strdup("<span style=\"italic\" background=\"#AAAAAA\" foreground=\"#FFFFFF\" font-size=\"25pt\">\%s</span>");
+  printf("%s\n", str);
+  str[34] = (int)(viewer->settings.background_color.red * 255) / 16;
+	if (str[34] < 10) str[34] += 48;
+	else str[34] += 55;
+  str[35] = (int)(viewer->settings.background_color.red * 255) % 16;
+	if (str[35] < 10) str[35] += 48;
+	else str[35] += 55;
+  str[36] = (int)(viewer->settings.background_color.green * 255) / 16;
+	if (str[36] < 10) str[36] += 48;
+	else str[36] += 55;
+  str[37] = (int)(viewer->settings.background_color.green * 255) % 16;
+	if (str[37] < 10) str[37] += 48;
+	else str[37] += 55;
+  str[38] = (int)(viewer->settings.background_color.blue * 255) / 16;
+	if (str[38] < 10) str[38] += 48;
+	else str[38] += 55;
+  str[39] = (int)(viewer->settings.background_color.blue * 255) % 16;
+	if (str[39] < 10) str[39] += 48;
+	else str[39] += 55;
+
+  printf("%s\n", str);
+
+  // i = 55;
+  // j = 0;
+  // while(i < 61)
+  //   str[i++] = color_fg[j++];
+
+  char *markup;
+  markup = g_markup_printf_escaped(str, text);
+  free(str);
+  gtk_label_set_markup(GTK_LABEL(viewer->label_filename), markup);
+  g_free(markup);
+}
+
 static void enter(GtkButton *btn, t_viewer *viewer) {
   const char *s;
   int i;
+  int result;
 
   if (viewer->info.make_screenshot != 0) return;
 
   viewer->filename = strdup(gtk_entry_buffer_get_text(
       gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_file))));
   // подготовить особождение перед открытием нового файла
-  free(viewer->info.vertexes3d);
-  viewer->info.vertexes3d = NULL;
-  free(viewer->info.vertexes2d);
-  viewer->info.vertexes2d = NULL;
-  ft_lstclear(&viewer->vertex_list, free);
-  viewer->vertex_list = NULL;
-  viewer->info.count_v = 0;
-  t_list *tmp;
+  free_all(viewer);
+  result = parser(viewer->filename, viewer);
 
-  tmp = viewer->info.faces;
-  t_plane *plane;
-  while (viewer->info.faces) {
-    plane = viewer->info.faces->content;
-    tmp = viewer->info.faces->next;
-    free(plane->indexes);
-    free(plane);
-    free(viewer->info.faces);
-    viewer->info.faces = tmp;
+  if (result == 1)
+  {
+    free_all(viewer);
+    return;
   }
-  viewer->info.faces = NULL;
-  parser(viewer->filename, viewer);
+
+  viewer->info.vertexes3d = malloc(sizeof(double) * viewer->info.count_v * 3);
+  viewer->info.vertexes2d = malloc(sizeof(double) * viewer->info.count_v * 2);
+  set_values(viewer);
 
   char *temp;
   char *str;
@@ -40,14 +72,9 @@ static void enter(GtkButton *btn, t_viewer *viewer) {
   free(str);
   free(temp);
   //    temp = ft_strjoin(viewer->filename, str);
-  char *markup;
-  markup = g_markup_printf_escaped(
-      "<span style=\"italic\" background=\"#000000\" foreground=\"#FFFFFF\" "
-      "font-size=\"25pt\">\%s</span>",
-      res);
+  create_stringlabel(res, viewer);
   free(res);
-  gtk_label_set_markup(GTK_LABEL(viewer->label_filename), markup);
-  g_free(markup);
+
   gtk_widget_queue_draw(viewer->model);
 }
 

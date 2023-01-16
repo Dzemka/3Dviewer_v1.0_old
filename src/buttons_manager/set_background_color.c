@@ -7,6 +7,16 @@ static void change_background_color(GtkWidget *btn, t_viewer *viewer)
     if (viewer->info.make_screenshot != 0)
         return;
     gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(btn), &viewer->settings.background_color);
+    char *temp;
+  char *str;
+  char *res;
+  temp = ft_itoa(viewer->info.count_v);
+  str = ft_strjoin(viewer->filename, " ");
+  res = ft_strjoin(str, temp);
+  free(str);
+  free(temp);
+    create_stringlabel(res, viewer);
+    free(res);
     gtk_widget_queue_draw(viewer->model);
 }
 

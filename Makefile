@@ -1,4 +1,5 @@
 NAME = viewer
+NAME_TEST = testing
 
 SRC = main.c \
 		run_app.c \
@@ -39,10 +40,21 @@ SRC = main.c \
 		save_settings.c \
 		get_settings.c \
 		parse_settings_from_file.c \
+	
+SRC_TEST = test.c \
+		matrix_transformation.c \
+		parser.c \
+		parse_value.c \
+		set_values.c \
+		ft_split.c \
+		list_utils.c \
+		utils.c \
 
 OBJ = $(SRC:%.c=$(OBJ_DIR)%.o)
+OBJ_TEST = $(SRC_TEST:%.c=$(OBJ_TEST_DIR)%.o)
 
 OBJ_DIR = ./obj/
+OBJ_TEST_DIR = ./obj_test/
 
 HEADER = src/viewer3D.h
 
@@ -59,12 +71,12 @@ TEX2DVI = $(shell tex2dvi)
 	LDFLAGS = $(GTK_LDFLAGS) -lm -lgd
 
 #COMMANDS
-	CC = gcc
+	CC = gcc -g
 	RM = rm -rf
 
 VPATH = ./src/ ./src/parser ./src/buttons_manager
 
-.PHONY	: all install uninstall clean  re dvi
+.PHONY	: all install uninstall clean  re dvi test
 
 all : install
 
@@ -77,10 +89,19 @@ $(OBJ_DIR)%.o:%.c $(HEADER)
 				mkdir -p $(OBJ_DIR)
 				$(CC) $(CFLAGS) -c $< -o $@
 
+test	:	$(NAME_TEST)
+
+$(NAME_TEST):	$(OBJ_TEST)
+		$(CC) $(OBJ_TEST) $(LDFLAGS) -o $(NAME_TEST)
+
+$(OBJ_TEST_DIR)%.o:%.c $(HEADER)
+				mkdir -p $(OBJ_TEST_DIR)
+				$(CC) $(CFLAGS) -c $< -o $@
+
 clean	:
-			$(RM) $(OBJ_DIR)
+			$(RM) $(OBJ_DIR) $(OBJ_TEST_DIR)
 uninstall	:	clean
-			$(RM) $(NAME)
+			$(RM) $(NAME) $(NAME_TEST)
 re 		: clean all
 
 dvi :

@@ -22,7 +22,7 @@ void    get_screenshot(t_viewer *viewer, cairo_surface_t *surface) {
     else
     {
         status_png = cairo_surface_write_to_png(surface, viewer->info.screenshot_file_name);
-//        printf("%d\n", status_png);
+    //    printf("%d\n", status_png);
         viewer->png_pause = FALSE;
     }
 }

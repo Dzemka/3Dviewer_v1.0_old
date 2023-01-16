@@ -17,6 +17,31 @@ char	*ft_strjoin(char const *s1, char const *s2)
     return (str);
 }
 
+void  free_all(t_viewer *viewer)
+{
+  free(viewer->info.vertexes3d);
+  viewer->info.vertexes3d = NULL;
+  free(viewer->info.vertexes2d);
+  viewer->info.vertexes2d = NULL;
+  ft_lstclear(&viewer->vertex_list, free);
+  viewer->vertex_list = NULL;
+  viewer->info.count_v = 0;
+  t_list *tmp;
+
+  tmp = viewer->info.faces;
+  t_plane *plane;
+  while (viewer->info.faces) {
+    plane = viewer->info.faces->content;
+    tmp = viewer->info.faces->next;
+    free(plane->indexes);
+    free(plane);
+    free(viewer->info.faces);
+    viewer->info.faces = tmp;
+  }
+  viewer->info.faces = NULL;
+  viewer->info.count_v = 0;
+}
+
 void clean_massive_2d(char ***m)
 {
   int i;

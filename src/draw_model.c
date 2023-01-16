@@ -47,11 +47,15 @@ static void draw_function(GtkDrawingArea *area, cairo_t *cr, int width,
                           int height, gpointer pointer) {
   t_viewer *viewer;
   cairo_t *cr1;
+  cairo_surface_t *surface = NULL;  // добавить в структуру
 
   //    printf("w h%d %d\n", width, height);
   viewer = pointer;
+  // if (surface) {
+  //       cairo_surface_destroy(surface);
+  //       surface = NULL;
+  // }
 //  if (!viewer->info.faces) return;
-  cairo_surface_t *surface = NULL;  // добавить в структуру
   if (gtk_native_get_surface(gtk_widget_get_native(viewer->model))) {
     surface = gdk_surface_create_similar_surface(
         gtk_native_get_surface(gtk_widget_get_native(viewer->model)),
@@ -72,6 +76,7 @@ static void draw_function(GtkDrawingArea *area, cairo_t *cr, int width,
   cairo_paint(cr);
   if (viewer->info.make_screenshot) get_screenshot(viewer, surface);
   cairo_surface_destroy(surface);
+  // surface = NULL;
 }
 
 void draw_model(t_viewer *viewer) {

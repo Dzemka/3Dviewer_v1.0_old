@@ -20,9 +20,9 @@ void *build_gif(t_viewer *viewer) {
 //    printf("-2\n");
 //    printf("-1\n");
 //    printf("%s\n", name);
-    out = NULL;
+    // out = NULL;
 //    usleep(1000000);
-    int fd;
+    // int fd;
 //    fd = open("new.gif", O_CREAT | O_TRUNC, 0777);
 //    printf("fd %d\n", fd);
 //    if (fd == -1) {
@@ -55,7 +55,7 @@ void *build_gif(t_viewer *viewer) {
 //    printf("exit\n");
 //    exit(0);
 //    printf("3\n");
-
+    gdImageTrueColorToPalette(image, 1, 3);
     gdImageGifAnimBegin(image, out, 0, 0);
 //    printf("4\n");
     gdImageGifAnimAdd(image, out, 1, 0, 0, 10, gdDisposalNone, NULL);
@@ -72,16 +72,17 @@ void *build_gif(t_viewer *viewer) {
         file_str[9] = i / 10 + 48;
         file_str[10] = (i % 10) + 48;
         image = gdImageCreateFromFile(file_str);
-        gdImageTrueColorToPalette(image, 1, 4);
+        gdImageTrueColorToPalette(image, 1, 3);
         gdImageGifAnimAdd(image, out, 1, 0, 0, 10, gdDisposalNone, NULL);
         gdImageDestroy(image);
-        fd = open(file_str, O_RDONLY);
-        if (fd != -1) {
-            close(fd);
-            status = remove(file_str);
-            if (status == -1)
-                printf("remove error file %s\n", file_str);
-        }
+        // fd = open(file_str, O_RDONLY);
+        // if (fd != -1) {
+        //     close(fd);
+        //     status = remove(file_str);
+        //     if (status == -1)
+        //         printf("remove error file %s\n", file_str);
+        // }
+        remove(file_str);
         i++;
     }
     free(file_str);
@@ -144,17 +145,17 @@ void *gif_create(void *arg) {
 
     viewer = arg;
     g_mkdir_with_parents("gifs", 0777);
-    viewer->info.width = 640;
-    viewer->info.width = 480;
-    int i;
-    i = 0;
-    double k = 640.0 / 1360.0;
-    while (i < viewer->info.count_v * 3) {
-        viewer->info.vertexes3d[i] = viewer->info.vertexes3d[i] * k;
-        viewer->info.vertexes3d[i + 1] = viewer->info.vertexes3d[i + 1] * k;
-        viewer->info.vertexes3d[i + 2] = viewer->info.vertexes3d[i + 2] * k;
-        i += 3;
-    }
+    // viewer->info.width = 640;
+    // viewer->info.height = 480;
+    // int i;
+    // i = 0;
+    // double k = 640.0 / 1360.0;
+    // while (i < viewer->info.count_v * 3) {
+    //     viewer->info.vertexes3d[i] = viewer->info.vertexes3d[i] * k;
+    //     viewer->info.vertexes3d[i + 1] = viewer->info.vertexes3d[i + 1] * k;
+    //     viewer->info.vertexes3d[i + 2] = viewer->info.vertexes3d[i + 2] * k;
+    //     i += 3;
+    // }
     move_value = malloc(sizeof(double) * 3);
     rotate_value = malloc(sizeof(double) * 3);
     gtk_widget_set_size_request(viewer->model, 640, 480); //сохранять размеры
@@ -164,17 +165,17 @@ void *gif_create(void *arg) {
     free(move_value);
     free(rotate_value);
     viewer->info.make_screenshot = DO_NOTHING;
-    viewer->info.width = 1360;
-    viewer->info.height = 1000;
-    i = 0;
-    k = 1360.0 / 640.0;
-    while (i < viewer->info.count_v * 3) {
-        viewer->info.vertexes3d[i] = viewer->info.vertexes3d[i] * k;
-        viewer->info.vertexes3d[i + 1] = viewer->info.vertexes3d[i + 1] * k;
-        viewer->info.vertexes3d[i + 2] = viewer->info.vertexes3d[i + 2] * k;
-        i += 3;
-    }
-    gtk_widget_set_size_request(viewer->model, 1360, 1000);
+    // viewer->info.width = 1360;
+    // viewer->info.height = 1000;
+    // i = 0;
+    // k = 1360.0 / 640.0;
+    // while (i < viewer->info.count_v * 3) {
+    //     viewer->info.vertexes3d[i] = viewer->info.vertexes3d[i] * k;
+    //     viewer->info.vertexes3d[i + 1] = viewer->info.vertexes3d[i + 1] * k;
+    //     viewer->info.vertexes3d[i + 2] = viewer->info.vertexes3d[i + 2] * k;
+    //     i += 3;
+    // }
+    // gtk_widget_set_size_request(viewer->model, 1360, 1000);
     build_gif(viewer);
 }
 
