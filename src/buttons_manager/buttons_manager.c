@@ -1,5 +1,58 @@
 #include "../viewer3D.h"
 
+void tester(t_viewer *viewer) {
+  printf("%ld\n", viewer->info.count_v);
+
+  //  int m[viewer->info.count_v][viewer->info.count_v];
+  int **m;
+  int i;
+
+  m = malloc(sizeof(int *) * viewer->info.count_v);
+  i = -1;
+  while (++i < viewer->info.count_v)
+    m[i] = malloc(sizeof(int) * viewer->info.count_v);
+  t_list *list;
+  t_plane *plane;
+  double coord_x;
+  double coord_y;
+  size_t index_vertex1;
+  size_t index_vertex2;
+
+  list = viewer->info.faces;
+  int j;
+
+  i = -1;
+  while (++i < viewer->info.count_v) {
+    j = -1;
+    while (++j < viewer->info.count_v) {
+      m[i][j] = 0;
+    }
+  }
+  printf("ok\n");
+  j = 0;
+
+  viewer->info.count_edge = 0;
+  while (list) {
+    j++;
+    plane = (t_plane *)list->content;
+    i = -1;
+    while (++i < (int)plane->size) {
+      index_vertex1 = (plane->indexes[i] - 1);
+      index_vertex2 = (plane->indexes[(i + 1) % plane->size] - 1);
+      if (m[index_vertex1][index_vertex2] == 0) {
+        m[index_vertex1][index_vertex2] = 1;
+        m[index_vertex2][index_vertex1] = 1;
+        viewer->info.count_edge++;
+      }
+    }
+    list = list->next;
+  }
+  printf("%ld\n", viewer->info.count_edge);
+  i = -1;
+  while (++i < viewer->info.count_v) free(m[i]);
+  free(m);
+}
+
 static void enter(GtkButton *btn, t_viewer *viewer) {
   const char *s;
   int i;
@@ -8,46 +61,15 @@ static void enter(GtkButton *btn, t_viewer *viewer) {
 
   viewer->filename = strdup(gtk_entry_buffer_get_text(
       gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_file))));
-  // подготовить особождение перед открытием нового файла
-  free(viewer->info.vertexes3d);
-  viewer->info.vertexes3d = NULL;
-  free(viewer->info.vertexes2d);
-  viewer->info.vertexes2d = NULL;
-  ft_lstclear(&viewer->vertex_list, free);
-  viewer->vertex_list = NULL;
-  viewer->info.count_v = 0;
-  t_list *tmp;
-
-  tmp = viewer->info.faces;
-  t_plane *plane;
-  while (viewer->info.faces) {
-    plane = viewer->info.faces->content;
-    tmp = viewer->info.faces->next;
-    free(plane->indexes);
-    free(plane);
-    free(viewer->info.faces);
-    viewer->info.faces = tmp;
+  clean_info(viewer);
+  if (parser(viewer->filename, viewer) == 1) {
+    create_stringlabel(viewer);
+    clean_info(viewer);
+    return;
   }
-  viewer->info.faces = NULL;
-  parser(viewer->filename, viewer);
-
-  char *temp;
-  char *str;
-  char *res;
-  temp = ft_itoa(viewer->info.count_v);
-  str = ft_strjoin(viewer->filename, " ");
-  res = ft_strjoin(str, temp);
-  free(str);
-  free(temp);
-  //    temp = ft_strjoin(viewer->filename, str);
-  char *markup;
-  markup = g_markup_printf_escaped(
-      "<span style=\"italic\" background=\"#000000\" foreground=\"#FFFFFF\" "
-      "font-size=\"25pt\">\%s</span>",
-      res);
-  free(res);
-  gtk_label_set_markup(GTK_LABEL(viewer->label_filename), markup);
-  g_free(markup);
+  set_values(viewer);
+  //  tester(viewer);
+  create_stringlabel(viewer);
   gtk_widget_queue_draw(viewer->model);
 }
 
@@ -80,15 +102,17 @@ void buttons_manager(t_viewer *viewer, GtkWidget *box_left,
                      GtkWidget *box_right) {
   button_entry_file(viewer, box_left);
   button_transformation(viewer, box_left);
-  button_proj(viewer, box_left);
-  set_background_color(viewer, box_left);
-  set_type_edge(viewer, box_left);
-  set_color_edge(viewer, box_left);
-  set_thickness_edge(viewer, box_left);
-  set_type_vertices(viewer, box_left);
-  set_color_vertices(viewer, box_left);
-  set_size_vertices(viewer, box_left);
+
   set_screenshot_frame(viewer, box_right);
   set_gif_frame(viewer, box_right);
-  set_resize_frame(viewer, box_right);
+  set_resize_frame(viewer, box_left);
+
+  button_proj(viewer, box_right);
+  set_background_color(viewer, box_right);
+  set_type_edge(viewer, box_right);
+  set_color_edge(viewer, box_right);
+  set_thickness_edge(viewer, box_right);
+  set_type_vertices(viewer, box_right);
+  set_color_vertices(viewer, box_right);
+  set_size_vertices(viewer, box_right);
 }

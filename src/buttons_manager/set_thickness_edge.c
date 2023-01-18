@@ -15,7 +15,10 @@ void set_thickness_edge(t_viewer *viewer, GtkWidget *box_buttons) {
   gtk_frame_set_label_align(GTK_FRAME(frame), 0.5);
   gtk_box_append(GTK_BOX(box_buttons), frame);
   thickness_scale = gtk_scale_new_with_range(
-      GTK_ORIENTATION_HORIZONTAL, MIN_EDGE_THICKNESS, MAX_EDGE_THICKNESS, 0.5);
+      GTK_ORIENTATION_HORIZONTAL, MIN_EDGE_THICKNESS, MAX_EDGE_THICKNESS, 1);
+  gtk_range_set_value(GTK_RANGE(thickness_scale),
+                      viewer->settings.edge_thickness);
+
   gtk_frame_set_child(GTK_FRAME(frame), thickness_scale);
   g_signal_connect_after(GTK_SCALE(thickness_scale), "value-changed",
                          G_CALLBACK(set_thickness), viewer);

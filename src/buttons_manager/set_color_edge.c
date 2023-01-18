@@ -4,6 +4,7 @@ static void change_edge_color(GtkWidget *btn, t_viewer *viewer) {
   if (viewer->info.make_screenshot != 0) return;
   gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(btn),
                              &viewer->settings.edge_color);
+  create_stringlabel(viewer);
   gtk_widget_queue_draw(viewer->model);
 }
 

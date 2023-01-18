@@ -3,13 +3,15 @@
 static void zooming(GtkButton *btn, t_viewer *viewer)
 {
     double z;
+    GtkEntryBuffer *buf;
 
-    if (viewer->info.make_screenshot != 0)
+    buf = gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_zoom));
+    if (gtk_entry_buffer_get_length(buf) > 7 || viewer->info.make_screenshot != 0)
         return;
-    z = atof(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_zoom))));
-    if (z == 0)
+    z = atof(gtk_entry_buffer_get_text(buf));
+    if (z <= 0)
         z = 1;
-    zoom(viewer, z);
+    zoom(viewer->info.vertexes3d, viewer->info.count_v * 3, z);
     gtk_widget_queue_draw(viewer->model);
 }
 

@@ -2,19 +2,19 @@
 
 static void move_all(GtkWidget *btn, t_viewer *viewer)
 {
-    double rotate_value;
+    double move_value;
 
     if (viewer->info.make_screenshot != 0)
         return;
-    rotate_value = 0;
-    rotate_value = atof(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_move_x))));
-    move(viewer, 0, rotate_value);
-    rotate_value = 0;
-    rotate_value = atof(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_move_y))));
-    move(viewer, 1, rotate_value);
-    rotate_value = 0;
-    rotate_value = atof(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_move_z))));
-    move(viewer, 2, rotate_value);
+    move_value = 0;
+    move_value = atof(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_move_x))));
+    move(viewer->info.vertexes3d, viewer->info.count_v * 3, X_AXES, move_value);
+    move_value = 0;
+    move_value = atof(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_move_y))));
+    move(viewer->info.vertexes3d, viewer->info.count_v * 3, Y_AXES, move_value);
+    move_value = 0;
+    move_value = atof(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_move_z))));
+    move(viewer->info.vertexes3d, viewer->info.count_v * 3, Z_AXES, move_value);
     gtk_widget_queue_draw(viewer->model);
 
 }

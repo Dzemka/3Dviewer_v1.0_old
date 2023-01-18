@@ -17,7 +17,9 @@ void set_size_vertices(t_viewer *viewer, GtkWidget *box_buttons)
     frame = gtk_frame_new("Select size of vertices");
     gtk_frame_set_label_align(GTK_FRAME(frame), 0.5);
     gtk_box_append(GTK_BOX(box_buttons), frame);
-    thickness_scale = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL, MIN_VERTICES_SIZE, MAX_VERTICES_SIZE, 0.5);
-    gtk_frame_set_child(GTK_FRAME(frame), thickness_scale);
+  thickness_scale = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL, MIN_VERTICES_SIZE, MAX_VERTICES_SIZE, 0.5);
+  gtk_range_set_value(GTK_RANGE(thickness_scale), viewer->settings.vertices_size);
+  gtk_frame_set_child(GTK_FRAME(frame), thickness_scale);
     g_signal_connect_after(GTK_SCALE(thickness_scale), "value-changed", G_CALLBACK(set_size), viewer);
+    printf("%f\n", viewer->settings.vertices_size);
 }

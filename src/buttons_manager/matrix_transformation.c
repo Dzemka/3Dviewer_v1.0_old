@@ -1,45 +1,46 @@
 #include "../viewer3D.h"
 
-void rotate(t_viewer *viewer, int axes, double rad)
+void rotate(double *vertexes3d, size_t count_coord, int axes, double degree)
 {
     int i;
-    double *m;
-    double v1;
-    double v2;
+    double coord1;
+    double coord2;
     int el1;
     int el2;
 
+    if (degree > 1000000)
+      return ;
+    degree *= M_PI / 180;
     el1 = (axes + 1) % 3;
     el2 = (axes + 2) % 3;
     i = 0;
-    m = viewer->info.vertexes3d;
-    while (i < viewer->info.count_v * 3)
+    while (i < count_coord)
     {
-        v1 = m[i + el1] * cos(rad) + m[i + el2] * sin(rad);
-        v2 = -1 * m[i + el1] * sin(rad) + m[i + el2] * cos(rad);
-        m[i + el1] = v1;
-        m[i + el2] = v2;
+        coord1 = vertexes3d[i + el1] * cos(degree) + vertexes3d[i + el2] * sin(degree);
+        coord2 = -1 * vertexes3d[i + el1] * sin(degree) + vertexes3d[i + el2] * cos(degree);
+        vertexes3d[i + el1] = coord1;
+        vertexes3d[i + el2] = coord2;
         i += 3;
     }
 }
 
-void zoom(t_viewer *viewer, double scale)
+void zoom(double *vertexes3d, size_t count_coord, double scale)
 {
     int i;
 
     i = -1;
-    while (++i < viewer->info.count_v * 3)
-        viewer->info.vertexes3d[i] *= scale;
+    while (++i < count_coord)
+        vertexes3d[i] *= scale;
 }
 
-void move(t_viewer *viewer, int axes, double move_step)
+void move(double *vertexes3d, size_t count_coord, int axes, double move_step)
 {
     int i;
 
-    i = 0; // добавить функцию пересчёта dimensions и добавить во все трансформации
-    while (i < viewer->info.count_v * 3)
+    i = 0;
+    while (i < count_coord)
     {
-        viewer->info.vertexes3d[i + axes] += move_step;
+        vertexes3d[i + axes] += move_step;
         i += 3;
     }
 }

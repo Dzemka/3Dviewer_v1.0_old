@@ -23,6 +23,9 @@
 #define MAX_EDGE_THICKNESS 5
 #define MIN_VERTICES_SIZE 1
 #define MAX_VERTICES_SIZE 10
+#define X_AXES 0
+#define Y_AXES 1
+#define Z_AXES 2
 
 typedef struct s_list {
   void *content;
@@ -47,7 +50,6 @@ typedef struct s_camera {
   double x;
   double y;
   double z;
-  double screen_z;  // поменять на coefficient_scaling
 } t_camera;
 
 typedef struct s_info {
@@ -58,11 +60,7 @@ typedef struct s_info {
   t_list *faces;
   t_camera camera;
   size_t count_v;
-  double rad_x;
-  double rad_y;
-  double rad_z;
-  double scale;
-  double move_step;
+  size_t count_edge;
   char *screenshot_format;
   char *screenshot_file_name;
   int make_screenshot;
@@ -106,6 +104,7 @@ typedef struct s_viewer {
   GtkWidget *label_filename;
   t_list *tmp;
   t_list *tmp2;
+//  cairo_surface_t *surface;
 } t_viewer;
 
 typedef struct s_matrix {
@@ -120,9 +119,11 @@ int parse_value(char **line, t_viewer *viewer);
 
 int parse_vertex(char **split_line, t_viewer *viewer);
 
-int parse_face(char **split_line, t_viewer *viewer);
+int parse_face(int *max_point, char **split_line, t_viewer *viewer);
 
 void set_values(t_viewer *viewer);
+
+void clean_info(t_viewer *viewer);
 
 char *ft_strjoin(char const *s1, char const *s2);
 
@@ -153,11 +154,11 @@ void draw_model(t_viewer *viewer);
 void buttons_manager(t_viewer *viewer, GtkWidget *box_left,
                      GtkWidget *box_right);
 
-void rotate(t_viewer *viewer, int axes, double rad);
+void rotate(double *vertexes3d, size_t count_coord, int axes, double degree);
 
-void zoom(t_viewer *viewer, double scale);
+void zoom(double *vertexes3d, size_t count_coord, double scale);
 
-void move(t_viewer *viewer, int axes, double move_step);
+void move(double *vertexes3d, size_t count_coord, int axes, double move_step);
 
 void fill_frame_moving(t_viewer *viewer, GtkWidget *box_buttons);
 
@@ -230,5 +231,25 @@ void  save_settings(t_viewer *viewer);
 void get_settings(t_viewer *viewer);
 
 int parse_settings_file(t_viewer *viewer, FILE *file);
+
+int parse_proj(t_viewer *viewer, char *line);
+
+int parse_edge_type(t_viewer *viewer, char *line);
+
+int parse_edge_color(t_viewer *viewer, char *line);
+
+int parse_edge_thickness(t_viewer *viewer, char *line);
+
+int parse_vertices_type(t_viewer *viewer, char *line);
+
+int parse_vertices_color(t_viewer *viewer, char *line);
+
+int parse_vertices_size(t_viewer *viewer, char *line);
+
+int parse_background_color(t_viewer *viewer, char *line);
+
+void create_stringlabel(t_viewer *viewer);
+
+int get_rgb(char **split, GdkRGBA *rgb);
 
 #endif

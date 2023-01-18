@@ -2,38 +2,44 @@
 
 static void resize(GtkWidget *btn, t_viewer *viewer)
 {
-    int width;
-    int height;
     GtkEntryBuffer *buf_width;
     GtkEntryBuffer *buf_height;
+    double old_width;
+    double old_height;
+    double k;
+
     if (viewer->info.make_screenshot != 0)
         return;
+    old_width = viewer->info.width;
+    old_height = viewer->info.height;
     buf_width = gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_width));
-    width = atoi(gtk_entry_buffer_get_text(buf_width));
+    viewer->info.width = atoi(gtk_entry_buffer_get_text(buf_width));
     buf_height = gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_height));
-    height = atoi(gtk_entry_buffer_get_text(buf_height));
+    viewer->info.height = atoi(gtk_entry_buffer_get_text(buf_height));
     if (gtk_entry_buffer_get_length(buf_width) == 0 && gtk_entry_buffer_get_length(buf_height) == 0)
         return;
-    if (width < 640)
+    if (viewer->info.width < 640)
     {
-        width = 640;
+        viewer->info.width = 640;
         gtk_entry_buffer_set_text(buf_width, "640", 3);
     }
-    if (width > 1360) {
-        width = 1360;
+    if (viewer->info.width > 1360) {
+        viewer->info.width = 1360;
         gtk_entry_buffer_set_text(buf_width, "1920", 4);
     }
-    if (height < 480)
+    if (viewer->info.height < 480)
     {
-        height = 480;
+        viewer->info.height = 480;
         gtk_entry_buffer_set_text(buf_height, "480", 3);
     }
-    if (height > 1000)
+    if (viewer->info.height > 1000)
     {
-        height = 1000;
+        viewer->info.height = 1000;
         gtk_entry_buffer_set_text(buf_height, "1000", 4);
     }
-    gtk_widget_set_size_request(viewer->model, width, height);
+    k = viewer->info.width / old_width;
+    zoom(viewer->info.vertexes3d, viewer->info.count_v * 3, k);
+    gtk_widget_set_size_request(viewer->model, viewer->info.width, viewer->info.height);
     gtk_widget_queue_draw(viewer->model);
 }
 

@@ -25,7 +25,7 @@ void set_type_edge(t_viewer *viewer, GtkWidget *box_buttons) {
   gtk_frame_set_child(GTK_FRAME(frame), box_proj);
 
   button_solid = gtk_check_button_new_with_label("Solid");
-  gtk_check_button_set_active(GTK_CHECK_BUTTON(button_solid), TRUE);
+
   gtk_box_append(GTK_BOX(box_proj), button_solid);
   g_signal_connect(GTK_CHECK_BUTTON(button_solid), "toggled",
                    G_CALLBACK(select_solid_type), viewer);
@@ -35,4 +35,9 @@ void set_type_edge(t_viewer *viewer, GtkWidget *box_buttons) {
   gtk_box_append(GTK_BOX(box_proj), button_dashed);
   g_signal_connect(GTK_CHECK_BUTTON(button_dashed), "toggled",
                    G_CALLBACK(select_dashed_type), viewer);
+  if (viewer->settings.is_dashed == 0)
+    gtk_check_button_set_active(GTK_CHECK_BUTTON(button_solid), TRUE);
+  else
+    gtk_check_button_set_active(GTK_CHECK_BUTTON(button_dashed), TRUE);
+
 }

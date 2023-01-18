@@ -3,15 +3,27 @@
 static void move_pos(GtkButton *btn, t_viewer *viewer)
 {
     double move_value;
+    GtkEntryBuffer *buf;
 
-    if (viewer->info.make_screenshot != 0)
+    buf = gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_move_x));
+    if (gtk_entry_buffer_get_length(buf) > 7 || viewer->info.make_screenshot != 0)
         return;
     move_value = 0;
-    move_value = atof(gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(viewer->entry.entry_move_x))));
-    printf("%f\n", move_value);
-    move(viewer, 0, move_value);
+    move_value = atof(gtk_entry_buffer_get_text(buf));
+    if (move_value > 0)
+    {
+        if (viewer->dimensions.x_max + move_value > 1000000)
+          return ;
+        viewer->dimensions.x_max += move_value;
+    }
+    if (move_value < 0)
+    {
+        if (viewer->dimensions.x_min + move_value < -1000000)
+          return ;
+        viewer->dimensions.x_min += move_value;
+    }
+    move(viewer->info.vertexes3d, viewer->info.count_v * 3, X_AXES, move_value);
     gtk_widget_queue_draw(viewer->model);
-
 }
 
 void input_moving_x(t_viewer *viewer, GtkWidget *box_moving)

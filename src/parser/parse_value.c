@@ -1,36 +1,37 @@
 #include "../viewer3D.h"
 
-double ft_atof(char *str)
-{
-    double value = 0, decimal = 1;
-    unsigned char sign = 0, dec = 0;
+double ft_atof(char *str) {
+  double value = 0, decimal = 1;
+  unsigned char sign = 0, dec = 0;
 
-    if (*str == '+') str++;
-    if (*str == '-') { sign = 1; str++; }
+  if (*str == '+') str++;
+  if (*str == '-') {
+    sign = 1;
+    str++;
+  }
 
-    while (*str) {
-        if (isdigit(*str)) {
-            value = (value * 10) + (*str - '0');
-            if (dec) decimal *= 10;
-        }
-        else if (*str == '.')
-            dec = 1;
-        else
-            break;
-        str++;
-    }
+  while (*str) {
+    if (isdigit(*str)) {
+      value = (value * 10) + (*str - '0');
+      if (dec) decimal *= 10;
+    } else if (*str == '.')
+      dec = 1;
+    else
+      break;
+    str++;
+  }
 
-    return (!sign) ? (value / decimal) : -(value / decimal);
+  return (!sign) ? (value / decimal) : -(value / decimal);
 }
 
 static void set_start_value(double value, int axes, t_viewer *viewer) {
-  if (axes == 0) {
+  if (axes == X_AXES) {
     viewer->dimensions.x_max = value;
     viewer->dimensions.x_min = value;
-  } else if (axes == 1) {
+  } else if (axes == Y_AXES) {
     viewer->dimensions.y_max = value;
     viewer->dimensions.y_min = value;
-  } else if (axes == 2) {
+  } else if (axes == Z_AXES) {
     viewer->dimensions.z_max = value;
     viewer->dimensions.z_min = value;
   }
@@ -72,9 +73,9 @@ static int fill_vertex(char **split_line, t_viewer *viewer) {
   }
   list = ft_lstnew(vertex);
   if (!viewer->vertex_list)
-      ft_lstadd_back(&viewer->vertex_list, list);
+    ft_lstadd_back(&viewer->vertex_list, list);
   else
-      ft_lstadd_back(&viewer->tmp, list);
+    ft_lstadd_back(&viewer->tmp, list);
   viewer->tmp = list;
 }
 
@@ -84,25 +85,28 @@ int parse_vertex(char **split_line, t_viewer *viewer) {
   i = -1;
   while (split_line[++i])
     ;
-  if (i != 3) {
-    printf("Incorrect number of points");
-    return (1);
+  if (i != 3 && i != 4) {
+    if (viewer->filename)
+      free(viewer->filename);
+    viewer->filename = strdup("Incorrect number of coordinates");
+    return (-1);
   }
   fill_vertex(split_line, viewer);
   return (0);
 }
 
-int parse_face(char **split_line, t_viewer *viewer) {
+int parse_face(int *max_point, char **split_line, t_viewer *viewer) {
   int i;
   t_plane *plane;
   t_list *list;
 
   i = -1;
-  while (split_line[++i])
-    ;
+  while (split_line[++i]);
   if (i < 3) {
-    printf("not enough plane points");
-    return (1);
+    if (viewer->filename)
+      free(viewer->filename);
+    viewer->filename = strdup("not enough plane points");
+    return (-1);
   }
   plane = malloc(sizeof(t_plane));
   if (!plane) exit_message("Malloc error");
@@ -110,12 +114,16 @@ int parse_face(char **split_line, t_viewer *viewer) {
   if (!plane->indexes) exit_message("Malloc error");
   plane->size = i;
   i = -1;
-  while (++i < plane->size) plane->indexes[i] = atoi(split_line[i]);
+  while (++i < plane->size) {
+    plane->indexes[i] = atoi(split_line[i]);
+    if (plane->indexes[i] > *max_point)
+      *max_point = plane->indexes[i];
+  }
   list = ft_lstnew(plane);
   if (!viewer->info.faces)
-      ft_lstadd_back(&viewer->info.faces, list);
+    ft_lstadd_back(&viewer->info.faces, list);
   else
-      ft_lstadd_back(&viewer->tmp2, list);
+    ft_lstadd_back(&viewer->tmp2, list);
   viewer->tmp2 = list;
   return (0);
 }
